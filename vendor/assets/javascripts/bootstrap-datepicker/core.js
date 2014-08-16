@@ -63,7 +63,7 @@
 				this.push.apply(this, new_array);
 			},
 			clear: function(){
-				this.splice(0);
+				this.length = 0;
 			},
 			copy: function(){
 				var a = new DateArray();
@@ -1284,25 +1284,32 @@
 			var dp = $(e.target).data('datepicker'),
 				new_date = dp.getUTCDate(),
 				i = $.inArray(e.target, this.inputs),
+				j = i - 1,
+				k = i + 1,
 				l = this.inputs.length;
 			if (i === -1)
 				return;
+
+			if ( new_date.getUTCFullYear() < 1000 ) {
+				delete this.updating;
+				return;
+			}
 
 			$.each(this.pickers, function(i, p){
 				if (!p.getUTCDate())
 					p.setUTCDate(new_date);
 			});
 
-			if (new_date < this.dates[i]){
+			if (new_date < this.dates[j]){
 				// Date being moved earlier/left
-				while (i >= 0 && new_date < this.dates[i]){
-					this.pickers[i--].setUTCDate(new_date);
+				while (j >= 0 && new_date < this.dates[j]){
+					this.pickers[j--].setUTCDate(new_date);
 				}
 			}
-			else if (new_date > this.dates[i]){
+			else if (new_date > this.dates[k]){
 				// Date being moved later/right
-				while (i < l && new_date > this.dates[i]){
-					this.pickers[i++].setUTCDate(new_date);
+				while (k < l && new_date > this.dates[k]){
+					this.pickers[k++].setUTCDate(new_date);
 				}
 			}
 			this.updateDates();
