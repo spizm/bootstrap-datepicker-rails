@@ -1120,10 +1120,11 @@
 						this.focusDate = null;
 						this.viewDate = this.dates.get(-1) || this.viewDate;
 						this.fill();
-					}
-					else
+						e.preventDefault();
+					} else if ( this.picker.is(':visible') ) {
 						this.hide();
-					e.preventDefault();
+						e.preventDefault();
+					}
 					break;
 				case 37: // left
 				case 39: // right
